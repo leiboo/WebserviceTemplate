@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.istuary.webserviceTemplate.api.dal"/>
+
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"-->
+    <!--destroy-method="close">-->
+    <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+    <!--<property name="url" value="jdbc:mysql://192.168.111.235:3306/demo?useUnicode=true&amp;characterEncoding=UTF-8"/>-->
+    <!--<property name="username" value="root"/>-->
+    <!--<property name="password" value="root"/>-->
+    <!--<property name="maxActive" value="100"/>-->
+    <!--<property name="initialSize" value="1"/>-->
+    <!--<property name="maxWait" value="60000"/>-->
+    <!--<property name="minIdle" value="10"/>-->
+    <!--&lt;!&ndash;<property name="proxyFilters">&ndash;&gt;-->
+    <!--&lt;!&ndash;<list>&ndash;&gt;-->
+    <!--&lt;!&ndash;<ref bean="master-stat-filter"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</list>&ndash;&gt;-->
+    <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--&lt;!&ndash; sleep millisecond of idle connection eviction thread  &ndash;&gt;-->
+    <!--<property name="timeBetweenEvictionRunsMillis" value="600000"/>-->
+    <!--&lt;!&ndash; minimum millisecond of idle connection&ndash;&gt;-->
+    <!--<property name="minEvictableIdleTimeMillis" value="3600000"/>-->
+    <!--<property name="poolPreparedStatements" value="true" />-->
+    <!--&lt;!&ndash;<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />&ndash;&gt;-->
+    <!--</bean>-->
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://192.168.111.235:3306/demo?useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <property name="initialSize" value="3" />
+        <property name="minIdle" value="3" />
+        <property name="maxIdle" value="5" />
+        <property name="maxTotal" value="15" />
+    </bean>
+
+    <!-- define the SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.istuary.webserviceTemplate.api.dal"/>
+        <property name="plugins">
+            <list>
+            </list>
+        </property>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:com/istuary/**/*.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- scan for mappers and let them be autowired -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.istuary.webserviceTemplate.api.dal"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':sub-webapp')
+//    runtime group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    testCompile 'junit:junit:4.12'
+}
+

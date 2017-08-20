@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="demoSpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="demoSchedualed"/>
+        <property name="targetMethod" value="pollingJob"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="systemStatusCronTrigger"  class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="demoSpringQtzJobMethod" />
+        <property name="startDelay" value="100" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+
+
+    <bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="demoSpringQtzJobMethod" />
+            </list>
+        </property>
+
+        <property name="triggers">
+            <list>
+                <ref bean="systemStatusCronTrigger" />
+            </list>
+        </property>
+    </bean>
+
+    <!--  spring schedule. NOT USED -->
+    <!--<task:scheduled-tasks scheduler="myScheduler">-->
+    <!--<task:scheduled ref="applicationPackageScheduled" method="pollingJob" fixed-delay="10000"/>-->
+    <!--<task:scheduled ref="mesosScheduled" method="pollingJob" fixed-rate="5000"/>-->
+    <!--</task:scheduled-tasks>-->
+    <!--<task:scheduler id="myScheduler" pool-size="10"/>-->
+</beans>
